@@ -1,17 +1,4 @@
-# Zephyr Example Application
-
-<a href="https://github.com/zephyrproject-rtos/example-application/actions/workflows/build.yml?query=branch%3Amain">
-  <img src="https://github.com/zephyrproject-rtos/example-application/actions/workflows/build.yml/badge.svg?event=push">
-</a>
-<a href="https://github.com/zephyrproject-rtos/example-application/actions/workflows/docs.yml?query=branch%3Amain">
-  <img src="https://github.com/zephyrproject-rtos/example-application/actions/workflows/docs.yml/badge.svg?event=push">
-</a>
-<a href="https://zephyrproject-rtos.github.io/example-application">
-  <img alt="Documentation" src="https://img.shields.io/badge/documentation-3D578C?logo=sphinx&logoColor=white">
-</a>
-<a href="https://zephyrproject-rtos.github.io/example-application/doxygen">
-  <img alt="API Documentation" src="https://img.shields.io/badge/API-documentation-3D578C?logo=c&logoColor=white">
-</a>
+# LXI Zephyr Demo
 
 This repository contains a Zephyr example application. The main purpose of this
 repository is to serve as a reference on how to structure Zephyr-based
@@ -62,9 +49,9 @@ command:
 
 ```shell
 # initialize my-workspace for the example-application (main branch)
-west init -m https://github.com/zephyrproject-rtos/example-application --mr main my-workspace
+west init -m https://github.com/ehunck/lxi-zephyr-demo.git --mr main lxi-zephyr-demo-workspace 
 # update Zephyr modules
-cd my-workspace
+cd lxi-zephyr-demo-workspace 
 west update
 ```
 
@@ -73,13 +60,13 @@ west update
 To build the application, run the following command:
 
 ```shell
-cd example-application
+cd lxi-zephyr-demo.git/
 west build -b $BOARD app
 ```
 
 where `$BOARD` is the target board.
 
-You can use the `custom_plank` board found in this
+You can use the `nucleo_f429zi` board found in this
 repository. Note that Zephyr sample boards may be used if an
 appropriate overlay is provided (see `app/boards`).
 
