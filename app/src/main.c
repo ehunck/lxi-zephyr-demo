@@ -1,28 +1,30 @@
-/*
- * Copyright (c) 2021 Nordic Semiconductor ASA
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #include <zephyr/kernel.h>
-#include <zephyr/drivers/sensor.h>
-#include <zephyr/logging/log.h>
+#include <zephyr/device.h>
+#include "gpio_control.h"
+#include "scpi_commands.h"
+#include "tcp_server.h"
 
-#include <app_version.h>
+// Allocate stack for the TCP server thread
+#define TCP_SERVER_STACK_SIZE 2048
+K_THREAD_STACK_DEFINE(tcp_server_stack, TCP_SERVER_STACK_SIZE);
 
-LOG_MODULE_REGISTER(main, CONFIG_APP_LOG_LEVEL);
+// Thread data structure for the TCP server
+struct k_thread tcp_server_thread_data;
 
-#define BLINK_PERIOD_MS_STEP 100U
-#define BLINK_PERIOD_MS_MAX  1000U
+int main(void) {
+    printk("Starting LXI I/O Expander\n");
 
-int main(void)
-{
-	printk("LXI Zephyr Demo Application %s\n", APP_VERSION_STRING);
+    // Initialize GPIO
+   gpio_init();
 
-	while (1) {
-		
-		k_sleep(K_MSEC(1000));
-	}
+    // Initialize SCPI
+    scpi_init();
+
+    // Start TCP server in a separate thread
+    k_thread_create(&tcp_server_thread_data, tcp_server_stack,
+                    K_THREAD_STACK_SIZEOF(tcp_server_stack),
+                    (k_thread_entry_t)tcp_server, NULL, NULL, NULL,
+                    7, 0, K_NO_WAIT);
 
 	return 0;
 }
-

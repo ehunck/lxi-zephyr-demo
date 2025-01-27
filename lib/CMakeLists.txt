@@ -1,3 +1,9 @@
-# SPDX-License-Identifier: Apache-2.0
+# Add SCPI library source files
+file(GLOB SCPI_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/scpi/libscpi/src/*.c)
 
-add_subdirectory_ifdef(CONFIG_CUSTOM custom)
+# Include the SCPI library headers
+zephyr_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/scpi/libscpi/inc)
+zephyr_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/scpi/libscpi/src)
+
+# Add SCPI sources to the build
+target_sources(app PRIVATE ${SCPI_SOURCES})

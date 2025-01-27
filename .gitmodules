@@ -1,0 +1,3 @@
+[submodule "lib/scpi"]
+	path = lib/scpi
+	url = https://github.com/j123b567/scpi-parser.git
