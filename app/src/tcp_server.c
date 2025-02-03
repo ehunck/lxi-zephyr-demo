@@ -5,6 +5,9 @@
 #include <string.h>
 #include "scpi_commands.h"
 
+#include <zephyr/net/net_if.h>
+#include <zephyr/net/net_mgmt.h>
+
 
 void tcp_server(void) {
     int sock, client;
@@ -25,11 +28,13 @@ void tcp_server(void) {
         zsock_close(sock);
         return;
     }
+
     if (zsock_listen(sock, 1) < 0) {
         printk("Failed to listen on socket\n");
         zsock_close(sock);
         return;
     }
+
     printk("TCP server listening on port %d\n", TCP_SERVER_PORT);
     while (1) {
         client = zsock_accept(sock, NULL, NULL);

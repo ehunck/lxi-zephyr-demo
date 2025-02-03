@@ -77,6 +77,11 @@ command:
 west build -b $BOARD app -- -DEXTRA_CONF_FILE=debug.conf
 ```
 
+```shell
+west build -b nucleo_f429zi app -- -DEXTRA_CONF_FILE=debug.conf
+```
+
+
 Once you have built the application, run the following command to flash it:
 
 ```shell
@@ -89,6 +94,20 @@ To execute Twister integration tests, run the following command:
 
 ```shell
 west twister -T tests --integration
+```
+
+### Activate the VENV
+
+```shell
+source ~/zephyrproject/.venv/bin/activate
+```
+
+### Ozone
+
+Run the command in the console to find the files built in WSL since Ozone is being run from Windows.
+
+```
+Project.AddPathSubstitute("/home/", "//wsl.localhost/Ubuntu/home/");
 ```
 
 ### Documentation

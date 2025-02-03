@@ -11,5 +11,9 @@ zephyr_syscall_include_directories(include)
 
 zephyr_include_directories(include)
 
+set(CMAKE_C_FLAGS "-O0 ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-O0 ${CMAKE_CXX_FLAGS}")
+
 add_subdirectory(drivers)
 add_subdirectory(lib)
+
