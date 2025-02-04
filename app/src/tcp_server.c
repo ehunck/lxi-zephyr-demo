@@ -23,6 +23,7 @@ void tcp_server(void) {
     addr.sin_family = AF_INET;
     addr.sin_port = htons(TCP_SERVER_PORT);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
     if (zsock_bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
         printk("Failed to bind socket\n");
         zsock_close(sock);
@@ -36,6 +37,7 @@ void tcp_server(void) {
     }
 
     printk("TCP server listening on port %d\n", TCP_SERVER_PORT);
+    
     while (1) {
         client = zsock_accept(sock, NULL, NULL);
         if (client < 0) {
