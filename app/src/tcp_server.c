@@ -9,7 +9,8 @@
 #include <zephyr/net/net_mgmt.h>
 
 
-void tcp_server(void) {
+void tcp_server(void) 
+{
     int sock, client;
     struct sockaddr_in addr;
     char buffer[256];
@@ -37,7 +38,7 @@ void tcp_server(void) {
     }
 
     printk("TCP server listening on port %d\n", TCP_SERVER_PORT);
-    
+
     while (1) {
         client = zsock_accept(sock, NULL, NULL);
         if (client < 0) {

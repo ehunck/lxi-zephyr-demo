@@ -4,6 +4,7 @@
 #include <zephyr/kernel.h>
 
 // Define the TCP server port
+#define TCP_SERVER_STACK_SIZE 2048
 #define TCP_SERVER_PORT 5025
 
 // Function prototype for the TCP server
