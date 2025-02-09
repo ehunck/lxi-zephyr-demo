@@ -54,9 +54,8 @@ void tcp_server(void)
             }
             // Pass the received command to libscpi
             SCPI_Input(&scpi_context, buffer, ret);
-            // // Send response back to the client
-            // const char *response = SCPI_Result(&scpi_context);
-            // send(client, response, strlen(response), 0);
+            // Yield periodically to allow other threads to run
+            k_yield(); // This gives other threads a chance to execute
         }
         zsock_close(client);
     }
