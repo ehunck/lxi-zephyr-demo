@@ -17,3 +17,11 @@ set(CMAKE_CXX_FLAGS "-O0 ${CMAKE_CXX_FLAGS}")
 add_subdirectory(drivers)
 add_subdirectory(lib)
 
+zephyr_linker_sources(SECTIONS sections-rom.ld)
+zephyr_linker_section(NAME test_http_service
+                      KVMA RAM_REGION GROUP RODATA_REGION
+                      SUBALIGN ${CONFIG_LINKER_ITERABLE_SUBALIGN})
+
+set(gen_dir ${ZEPHYR_BINARY_DIR}/include/generated/)
+set(source_file_index webpage/index.html)
+generate_inc_file_for_target(app ${source_file_index} ${gen_dir}/index.html.gz.inc --gzip)
