@@ -3,8 +3,6 @@
 #include <inttypes.h>
 #include <zephyr/kernel.h>
 #include <zephyr/net/tls_credentials.h>
-#include <zephyr/net/http/server.h>
-#include <zephyr/net/http/service.h>
 #include <zephyr/net/net_ip.h>
 #include <zephyr/net/socket.h>
 #include "zephyr/device.h"
@@ -12,7 +10,6 @@
 #include <zephyr/drivers/led.h>
 #include <zephyr/data/json.h>
 #include <zephyr/sys/util_macro.h>
-#include "webpage.h"
 
 
 static const uint8_t index_html_gz[] = {

@@ -18,9 +18,10 @@ add_subdirectory(drivers)
 add_subdirectory(lib)
 
 zephyr_linker_sources(SECTIONS sections-rom.ld)
-zephyr_linker_section(NAME test_http_service
-                      KVMA RAM_REGION GROUP RODATA_REGION
-                      SUBALIGN ${CONFIG_LINKER_ITERABLE_SUBALIGN})
+zephyr_linker_section(NAME 
+                    http_resource_desc_test_http_service
+                    KVMA RAM_REGION GROUP RODATA_REGION
+                    SUBALIGN ${CONFIG_LINKER_ITERABLE_SUBALIGN})
 
 set(gen_dir ${ZEPHYR_BINARY_DIR}/include/generated/)
 set(source_file_index webpage/index.html)
