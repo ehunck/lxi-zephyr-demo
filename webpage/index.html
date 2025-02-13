@@ -1,1 +1,277 @@
-Hello there
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Millipede Utility</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 330px;
+      background: #333;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .sidebar h1 {
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .sidebar button {
+      background: none;
+      border: none;
+      color: #f5f5f5;
+      text-align: left;
+      padding: 10px 15px;
+      margin-bottom: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .sidebar button:hover,
+    .sidebar button.active {
+      background: #005f99;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .gpio-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .gpio-item:last-child {
+      border-bottom: none;
+    }
+
+    .gpio-item span {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .status {
+      font-weight: bold;
+      color: #005f99;
+    }
+
+    .btn-small {
+      background-color: #666;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-left: 5px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-small:hover {
+      background-color: #777;
+    }
+
+    .btn {
+      background-color: #005f99;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #003f6b;
+    }
+
+    form label {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      background: #005f99;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background: #003f6b;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1>Millipede Output Module Configuration Utility</h1>
+    <p><img src="millipede-logo-dark-gray.png" alt="Millipede Logo"></p>
+    <button class="active" data-section="gpio">Digital Output Control</button>
+    <button data-section="network">Network Config</button>
+    <button data-section="help">Help</button>
+  </div>
+
+  <div class="main">
+    <!-- GPIO States -->
+    <div id="gpio" class="panel">
+      <h2>Digital Output Control</h2>
+      <button id="set-all-low" class="btn">Set All Outputs Low</button>
+      <div id="gpio-container"></div>
+    </div>
+
+    <!-- Network Config -->
+    <div id="network" class="panel" style="display: none;">
+      <h2>Network Config</h2>
+
+      <form method='POST' action='/configure'>
+        <label for="ip">IP Address</label>
+        <input type="text" id="ip_address" value="192.168.1.100">
+        <label for="netmask">Netmask</label>
+        <input type="text" id="subnet_mask" value="255.255.255.0">
+        <label for="gateway">Gateway</label>
+        <input type="text" id="gateway" value="192.168.1.1">
+        <button type="submit">Save Config</button>
+      </form>
+    </div>
+
+    <!-- Help -->
+    <div id="help" class="panel" style="display: none;">
+      <h2>Help</h2>
+      <p>The Millipede Output Module GPIO expander is a versatile device designed specifically for <strong>test and measurement applications</strong>. It features <strong>16 GPIO outputs</strong>, enabling precise control and monitoring for a variety of use cases in laboratory and industrial environments.</p>
+      <p>For more information, visit the <a href="https://github.com/ehunck/lxi-zephyr-demo">GitHub repository</a>.</p>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".sidebar button");
+    const sections = document.querySelectorAll(".main > .panel");
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        sections.forEach(sec => sec.style.display = "none");
+
+        button.classList.add("active");
+        document.getElementById(button.dataset.section).style.display = "block";
+      });
+    });
+
+    // Function to dynamically create 16 GPIO items
+    function createGPIOItems() {
+      const gpioContainer = document.getElementById("gpio-container");
+
+      for (let i = 0; i < 64; i++) {
+        const gpioItem = document.createElement("div");
+        gpioItem.classList.add("gpio-item");
+
+        // Create GPIO label
+        const gpioLabel = document.createElement("span");
+        gpioLabel.textContent = `GPIO ${i}`;
+
+        // Create Status Display
+        const gpioStatus = document.createElement("span");
+        gpioStatus.classList.add("status");
+        gpioStatus.textContent = "LOW";
+        gpioStatus.style.color = "#000000";
+        gpioStatus.style.backgroundColor = "#ffffff";
+
+        // Create LOW button
+        const lowButton = document.createElement("button");
+        lowButton.textContent = "Set LOW";
+        lowButton.classList.add("btn-small");
+        lowButton.addEventListener("click", () => {
+          gpioStatus.textContent = "LOW";
+          gpioStatus.style.color = "#000000";
+          gpioStatus.style.backgroundColor = "#ffffff";
+        });
+
+        // Create HIGH button
+        const highButton = document.createElement("button");
+        highButton.textContent = "Set HIGH";
+        highButton.classList.add("btn-small");
+        highButton.addEventListener("click", () => {
+          gpioStatus.textContent = "HIGH";
+          gpioStatus.style.color = "#ffffff";
+          gpioStatus.style.backgroundColor = "#0299f5";
+        });
+
+        // Append elements to the gpio-item
+        gpioItem.appendChild(gpioLabel);
+        gpioItem.appendChild(gpioStatus);
+        gpioItem.appendChild(lowButton);
+        gpioItem.appendChild(highButton);
+
+        // Add gpio-item to the container
+        gpioContainer.appendChild(gpioItem);
+      }
+    }
+
+    // Function to set all GPIOs to LOW
+    function setAllGPIOsLow() {
+      const gpioStatuses = document.querySelectorAll("#gpio-container .status");
+      gpioStatuses.forEach(status => (status.textContent = "LOW"));
+      gpioStatuses.forEach(status => (status.style.color = "#000000"));
+      gpioStatuses.forEach(status => (status.style.backgroundColor = "#ffffff"));
+    }
+
+    // Initialize the GPIO items and add the "Set All Outputs Low" button functionality
+    document.addEventListener("DOMContentLoaded", () => {
+      createGPIOItems();
+
+      const setAllLowBtn = document.getElementById("set-all-low");
+      setAllLowBtn.addEventListener("click", setAllGPIOsLow);
+    });
+  </script>
+</body>
+</html>
