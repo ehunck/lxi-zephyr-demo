@@ -24,5 +24,16 @@ zephyr_linker_section(NAME
                     SUBALIGN ${CONFIG_LINKER_ITERABLE_SUBALIGN})
 
 set(gen_dir ${ZEPHYR_BINARY_DIR}/include/generated/)
-set(source_file_index webpage/index.html)
-generate_inc_file_for_target(app ${source_file_index} ${gen_dir}/index.html.gz.inc --gzip)
+
+foreach(web_resource
+  index.html
+  millipede-logo-dark-gray.png
+    )
+  generate_inc_file_for_target(
+    app
+    webpage/${web_resource}
+    ${gen_dir}/${web_resource}.gz.inc
+    --gzip
+  )
+endforeach()
+
