@@ -11,6 +11,13 @@
 #include <zephyr/data/json.h>
 #include <zephyr/sys/util_macro.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/data/json.h>
+
+struct json_data {
+    char ip_address[16];
+    char subnet_mask[16];
+    char gateway[16];
+};
 
 LOG_MODULE_REGISTER(http_server, LOG_LEVEL_DBG);
 
@@ -83,20 +90,26 @@ static int dyn_configure_handler(struct http_client_ctx *client,
         processed = 0;
     }
 
-	char ip_address[16] = {0};
-	char subnet_mask[16] = {0};
-	char gateway[16] = {0};
+    /* Parse the JSON */
+   	struct json_data data;
+    struct json_obj_descr json_descr[] = {
+        JSON_OBJ_DESCR_PRIM(struct json_data, ip_address, JSON_TOK_STRING),
+        JSON_OBJ_DESCR_PRIM(struct json_data, subnet_mask, JSON_TOK_STRING),
+        JSON_OBJ_DESCR_PRIM(struct json_data, gateway, JSON_TOK_STRING),
+    };
 
-	/* Parse the data */
-	int count = sscanf(request_ctx->data, "ip_address=%s&subnet_mask=%s&gateway=%s", ip_address, subnet_mask, gateway);	
-	if (count == 3) {
-		int success = apply_network_config(ip_address, subnet_mask, gateway);
-		if (success == 0) {
-			LOG_INF("Network configuration applied successfully.");
-		} else {
-			LOG_ERR("Failed to apply network configuration.");
-		}
-	}
+    int ret = json_obj_parse(request_ctx->data, request_ctx->data_len, json_descr, ARRAY_SIZE(json_descr), &data);
+    if (ret < 0) {
+        LOG_ERR("Failed to parse JSON: %d", ret);
+        return -1;
+    }
+
+    int success = apply_network_config(data.ip_address, data.subnet_mask, data.gateway);
+    if (success == 0) {
+        LOG_INF("Network configuration applied successfully.");
+    } else {
+        LOG_ERR("Failed to apply network configuration.");
+    }
 
     /* Echo data back to client */
     response_ctx->body = request_ctx->data;
