@@ -174,15 +174,16 @@
     <div id="network" class="panel" style="display: none;">
       <h2>Network Config</h2>
 
-      <form method='POST' action='/configure'>
-        <label for="ip">IP Address</label>
-        <input type="text" id="ip_address" value="192.168.1.100">
-        <label for="netmask">Netmask</label>
-        <input type="text" id="subnet_mask" value="255.255.255.0">
+      <form method="POST" action="/configure">
+        <label for="ip_address">IP Address</label>
+        <input type="text" id="ip_address" name="ip_address" value="192.168.1.100">
+        <label for="subnet_mask">Netmask</label>
+        <input type="text" id="subnet_mask" name="subnet_mask" value="255.255.255.0">
         <label for="gateway">Gateway</label>
-        <input type="text" id="gateway" value="192.168.1.1">
+        <input type="text" id="gateway" name="gateway" value="192.168.1.1">
         <button type="submit">Save Config</button>
       </form>
+    
     </div>
 
     <!-- Help -->
@@ -211,7 +212,7 @@
     function createGPIOItems() {
       const gpioContainer = document.getElementById("gpio-container");
 
-      for (let i = 0; i < 64; i++) {
+      for (let i = 0; i < 16; i++) {
         const gpioItem = document.createElement("div");
         gpioItem.classList.add("gpio-item");
 
