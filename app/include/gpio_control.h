@@ -12,6 +12,6 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
 // Function prototypes
 int gpio_init(void);
-void gpio_set_led_state(bool state);
+void gpio_set_state(int index, bool state); 
 
 #endif // GPIO_CONTROL_H

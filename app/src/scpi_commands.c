@@ -96,7 +96,7 @@ scpi_result_t SCPI_DigitalOutputQ(scpi_t *context) {
         return SCPI_RES_ERR;
     }
 
-    gpio_set_led_state(state);
+    // gpio_set_led_state(state);
     return SCPI_RES_OK;
 }
 
