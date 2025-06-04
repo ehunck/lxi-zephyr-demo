@@ -2,6 +2,8 @@ name: Tagged Build
 
 on:
   push:
+    branches:
+      - main
     tags:
       - '*'
 
@@ -31,12 +33,14 @@ jobs:
         run: west build -b custom_plank app
 
       - name: Upload build artifact
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
           name: firmware
           path: example-application/build/zephyr/zephyr.*
 
       - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: example-application/build/zephyr/zephyr.*
