@@ -112,5 +112,10 @@ ZTEST(scpi_suite, test_status_preset)
     scpi_test_cmd("STATus:PRESet\r\n", "");
 }
 
+ZTEST(scpi_suite, test_digital_output)
+{
+    scpi_test_cmd("DIGital:OUTPut 1\r\n", "");
+}
+
 ZTEST_SUITE(scpi_suite, NULL, scpi_setup, NULL, NULL, NULL);
 

@@ -162,6 +162,8 @@ const scpi_command_t scpi_commands[] = {
 
     {.pattern = "STATus:PRESet", .callback = SCPI_StatusPreset,},
 
+    { .pattern = "DIGITAL:OUTPUT", .callback = SCPI_DigitalOutputQ,},
+
     // /* DMM */
     // {.pattern = "MEASure:VOLTage:DC?", .callback = DMM_MeasureVoltageDcQ,},
     // {.pattern = "CONFigure:VOLTage:DC", .callback = DMM_ConfigureVoltageDc,},
