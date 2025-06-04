@@ -1,0 +1,42 @@
+name: Tagged Build
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: example-application
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Setup Zephyr project
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: example-application
+          toolchains: arm-zephyr-eabi
+
+      - name: Build firmware
+        working-directory: example-application
+        run: west build -b custom_plank app
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: example-application/build/zephyr/zephyr.*
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: example-application/build/zephyr/zephyr.*
