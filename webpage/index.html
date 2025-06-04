@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Millipede Utility</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -157,9 +158,11 @@
   <div class="sidebar">
     <h1>Millipede Output Module Configuration Utility</h1>
     <p><img src="millipede-logo-dark-gray.png" alt="Millipede Logo"></p>
-    <button class="active" data-section="gpio">Digital Output Control</button>
-    <button data-section="network">Network Config</button>
-    <button data-section="help">Help</button>
+    <button class="active" data-section="gpio"><i class="fas fa-microchip"></i> Digital Output</button>
+    <button data-section="network"><i class="fas fa-network-wired"></i> Network</button>
+    <button data-section="tx"><i class="fas fa-paper-plane"></i> TX</button>
+    <button data-section="rx"><i class="fas fa-inbox"></i> RX</button>
+    <button data-section="help"><i class="fas fa-question-circle"></i> Help</button>
   </div>
 
   <div class="main">
@@ -186,6 +189,20 @@
 
       <p id="config-status"></p>
     
+    </div>
+
+    <!-- TX Page -->
+    <div id="tx" class="panel" style="display: none;">
+      <h2>Transmit (TX)</h2>
+      <textarea id="tx-message" rows="4" style="width:100%;"></textarea>
+      <button id="send-btn" class="btn">Send</button>
+      <p id="tx-status"></p>
+    </div>
+
+    <!-- RX Page -->
+    <div id="rx" class="panel" style="display: none;">
+      <h2>Receive (RX)</h2>
+      <div id="rx-container" style="min-height:100px;border:1px solid #ccc;padding:10px;"></div>
     </div>
 
     <!-- Help -->
@@ -232,6 +249,12 @@
         button.classList.add("active");
         document.getElementById(button.dataset.section).style.display = "block";
       });
+    });
+
+    document.getElementById("send-btn").addEventListener("click", () => {
+      const msg = document.getElementById("tx-message").value;
+      document.getElementById("tx-status").textContent = `Sent: ${msg}`;
+      document.getElementById("tx-message").value = "";
     });
 
     // Function to dynamically create 16 GPIO items
