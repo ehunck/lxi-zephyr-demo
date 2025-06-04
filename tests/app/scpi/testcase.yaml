@@ -1,0 +1,7 @@
+common:
+  tags: scpi
+  integration_platforms:
+    - qemu_cortex_m0
+    - custom_plank
+tests:
+  app.scpi: {}
